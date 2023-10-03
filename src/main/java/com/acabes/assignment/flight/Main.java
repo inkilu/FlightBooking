@@ -10,9 +10,11 @@ public class Main {
         int userSelect;
         String password;
         String []timeArray={"10:00 Am","12:30 PM","09:00 AM"};
+        int [] availableTime;
         Scanner sc = new Scanner(System.in);
         Flight f1 = new Flight();
         Passenger p1 = new Passenger();
+        int flag=0;
         do {
             System.out.println("1.User");
             System.out.println("2.Admin");
@@ -36,6 +38,7 @@ public class Main {
                             String flightName;
                             System.out.println("How many flights?");
                             numberOfFlights = sc.nextInt();
+                            flag = numberOfFlights;
                             for (int i = 0; i < numberOfFlights; i++) {
                                 System.out.println("Enter flight name");
                                 flightName = sc.next();
@@ -91,20 +94,24 @@ public class Main {
                 int userCase;
                 System.out.println("1. Book a Flight");
                 System.out.println("2. Check Available flights");
+                System.out.println("3. Check Remaining Seats");
+                List <Integer> availableSeats = new ArrayList<>();
+                availableTime = new int[f1.getFlights().size()];
                 userCase = sc.nextInt();
                 switch (userCase) {
                     case 1:
                         System.out.println("Enter plane id");
                         System.out.println(f1.getFlights());
-                        int flightName;
+                        int flightName; // flight id
                         flightName = sc.nextInt();
                         System.out.println("Enter how many seats to book");
-                        int setsToBook;
+                        int setsToBook; // number of seats
                         setsToBook = sc.nextInt();
                         String flightNameToStore = f1.getFlights().get(flightName);
                         //System.out.println(flightNameToStore);
                         HashMap<String,Integer> flightValueStoring = new HashMap<>();
                         flightValueStoring.put(flightNameToStore,100-setsToBook);
+                        availableTime[flightName] -= setsToBook;
                         System.out.println(setsToBook+" Tickets booked for "+flightNameToStore);
                         break;
                     case 2:
@@ -112,7 +119,7 @@ public class Main {
                         System.out.println("Available flights are");
                         System.out.println("-------------------------");
                         for( Map.Entry<Integer, String> entry : f1.getFlights().entrySet() ){
-                            System.out.println( "Flight ID:  "+entry.getKey() + "Name:  " + entry.getValue() );
+                            System.out.println( "Flight ID: "+entry.getKey() + " Name: " + entry.getValue() );
                         }
                         System.out.println("-------------------------");
                         System.out.println("Available Timings are");
@@ -120,6 +127,18 @@ public class Main {
                         for (String x: timeArray) {
                             System.out.println(x);
                         }
+                        break;
+                    case 3:
+                        int count=0;
+                        System.out.println(flag);
+                        for (int i=0;i<flag;i++){
+                            availableTime[i]=100;
+                        }
+                        for (int x:availableTime) {
+                            System.out.println("Available seats for the id " + count +" flight id is "+x);
+                            count++;
+                        }
+                        break;
                 }
                 System.out.println("-------------------------");
             }
